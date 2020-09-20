@@ -1,28 +1,35 @@
 const initialState = {
-    taskAdded:false,
-    prevTasksValue:0,
     totalTasks: 0,
-    inactiveTaskArray:[],
-    activeTaskArray:[]  
+    taskArray: [],
 }
 const taskReducer = (state = initialState, action) => {
     let newState
     switch (action.type) {
         case 'ADD_TASK':
             newState = {
-                taskAdded:true,
-                prevTasksValue:state.totalTasks,
-                totalTasks : state.totalTasks + action.payload,
-                activeTaskArray:state.activeTaskArray,
-                inactiveTaskArray:state.inactiveTaskArray
+                totalTasks: state.totalTasks + action.payload,
+                taskArray: state.taskArray
             }
             return newState
-        case 'REMOVE_TASK':
-            newState = {
-                prevTasksValue:state.totalTasks,
-                totalTasks:state.totalTasks - 1,
+        case 'RESET_TASKS':
+            if (state.totalTasks === 1) {
+                newState = {
+                    totalTasks: 0,
+                    taskArray: []
+                }
             }
-            return state - 1
+            else {
+                state.taskArray.splice(0, 1)
+                state.taskArray[0].status = 'active'
+                newState = {
+                    totalTasks: state.totalTasks - 1,
+                    taskArray: state.taskArray
+                }
+            }
+            return newState
+        case 'ADD_TASKS_ARRAY':
+            newState = { ...state, taskArray: [...state.taskArray, action.payload] }
+            return newState
         default:
             return state
     }

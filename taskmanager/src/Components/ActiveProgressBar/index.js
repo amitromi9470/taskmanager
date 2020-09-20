@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux'
 import { container, label } from '../../Styles/styles'
 
 const ActiveProgressBar = () => {
     const [completed, setCompleted] = useState(0);
+    const dispatch = useDispatch()
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -10,11 +12,16 @@ const ActiveProgressBar = () => {
                 const newCompleted = completed + 20;
                 if (newCompleted === 100) {
                     clearInterval(interval)
+                    dispatch({
+                        type: 'RESET_TASKS'
+                    })
                 }
                 return newCompleted
             })
         }, 1000)
     }, []);
+
+    const barStatus = completed === 100 ? `COMPLETED` : `${completed}%`
 
     const filler = {
         height: '100%',
@@ -27,7 +34,7 @@ const ActiveProgressBar = () => {
     return (
         <div style={container}>
             <div style={filler}>
-                <span style={label}>{`${completed}%`}</span>
+                <span style={label}>{barStatus}</span>
             </div>
         </div>
 

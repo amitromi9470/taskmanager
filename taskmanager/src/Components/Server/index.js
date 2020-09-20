@@ -3,8 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Button } from 'react-bootstrap'
 import { flex } from '../../Styles/styles'
 
-const Server = (props) => {
-    const serverState = useSelector(state => state.servers) // Remove this line
+const Server = () => {
     const servers = useSelector(state => state.servers.servers)
     const serverCount = useSelector(state => state.servers.noOfServers)
     const dispatch = useDispatch()

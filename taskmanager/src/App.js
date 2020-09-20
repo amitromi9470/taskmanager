@@ -1,45 +1,24 @@
-import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
+import React from 'react'
+import { useSelector} from 'react-redux'
 import Server from './Components/Server'
 import Task from './Components/Tasks'
 import InactiveProgressBar from './Components/InactiveProgressBar'
 import ActiveProgessBar from './Components/ActiveProgressBar'
 import { Container, Row, Col } from 'react-bootstrap'
-import {body} from './Styles/styles'
+import { body } from './Styles/styles'
 
 function App() {
+  const taskArray = useSelector(state => state.totalTasks.taskArray)
   const totalTasks = useSelector(state => state.totalTasks.totalTasks)
-  const prevTasksValue = useSelector(state => state.totalTasks.prevTasksValue)
-  const inactiveTaskArray = useSelector(state => state.totalTasks.inactiveTaskArray)
-  const activeTaskArray = useSelector(state => state.totalTasks.activeTaskArray)
-  const taskAdded = useSelector(state => state.totalTasks.taskAdded)
 
-  const renderInactiveProgressBar = () => {
-    const newTaskAdded = totalTasks - prevTasksValue;
-    if (prevTasksValue === 0 && newTaskAdded > 1) {
-      let j;
-      for (j = 1; j < newTaskAdded; j++) {
-        inactiveTaskArray.push(j)
+  const renderBars = () => {
+    return taskArray.map(task => {
+      if (task.status === 'active') {
+        return <ActiveProgessBar key={task.key}/>
       }
-      return inactiveTaskArray.map(key => {
-        return <InactiveProgressBar barKey={key + prevTasksValue} />
-      })
-    }
-    if (prevTasksValue > 0) {
-      let i;
-      for (i = prevTasksValue; i < totalTasks; i++) {
-        inactiveTaskArray.push(i)
-      }
-      return inactiveTaskArray.map(key => {
-        return <InactiveProgressBar barKey={key + prevTasksValue} />
-      })
-    }
-  }
-
-  const renderActiveProgressBar = () => {
-    if (taskAdded && prevTasksValue >= 0)
-      return <ActiveProgessBar />
-    return null
+      else
+        return <InactiveProgressBar/>
+    })
   }
 
   return (
@@ -48,8 +27,7 @@ function App() {
         <Row>
           <Col lg={3}><Task /></Col>
           <Col lg={4}>
-            {renderActiveProgressBar()}
-            {taskAdded && renderInactiveProgressBar()}
+            {totalTasks > 0 && renderBars()}
           </Col>
           <Col lg={{ span: 3, offset: 2 }}><Server /></Col>
         </Row>
