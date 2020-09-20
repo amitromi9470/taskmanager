@@ -8,7 +8,7 @@ export const container = {
 
 export const label = {
     padding: 5,
-    color: 'white',
+    color: 'black',
     fontWeight: 'bold'
 }
 
